@@ -9,7 +9,7 @@ OBJS2	= user.o
 all:	$(TARGET1) $(TARGET2)
 
 $(TARGET1):	$(OBJS1)
-	$(CC) -o $(TARGET1) $(OBJS1)
+	$(CC) -o $(TARGET1) $(OBJS1) 
 
 $(TARGET2):	$(OBJS2)
 	$(CC) -o $(TARGET2) $(OBJS2)
