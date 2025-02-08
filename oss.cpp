@@ -89,8 +89,13 @@ int main(int argc, char *argv[])
 	{
 		for (int i=0; i<simul; i++)
 		{
-			pid_t childPid = fork();
+			
 			count++;
+			cout << "count: " << count << endl;
+			if (count > proc)
+				break;
+
+			pid_t childPid = fork();
 	
 			if (childPid == 0)
 			{
