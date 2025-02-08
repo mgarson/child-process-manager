@@ -8,16 +8,22 @@ using namespace std;
 
 int main(int argc, char** argv)
 {       
-        printf("Hello from user.cpp, a new executable!\n");
-	printf("My process id is: %d\n", getpid());
-	printf("I have %d arguments: \n", argc);
+	int iter = atoi(argv[1]);
 
-	int i;
-	for(i=0; i<argc; i++)
-		printf("|%s| ", argv[i]);
+	printf("USER PID: %d ", getpid());
+	printf("PPID: %d ", getppid());
+	printf("Iteration: %d ", iter);
+	printf("before sleeping\n");
+
+	sleep(1);
+
+	printf("USER PID: %d ", getpid());
+	printf("PPID: %d ", getppid());
+	printf("Iteration: %d ", iter);
+	printf("after sleeping\n");
+
 	printf("\nChild is now ending\n");
-
-	sleep(3);
+	
         return EXIT_SUCCESS;
         
 }       

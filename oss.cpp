@@ -2,6 +2,8 @@
 #include <unistd.h>
 #include <cstdlib>
 #include <sys/wait.h>
+#include <string>
+#include <cstring>
 
 using namespace std;
 
@@ -18,11 +20,11 @@ int main(int argc, char *argv[])
 {
 	const char optstr[] = "hn:s:t:"; // options h, n, s, t
 	char opt;
+	string str;
 	int proc = 0;
 	int simul = 0;
 	int iter = 0;
 	int count = 0;
-	cout << simul << endl;
 
 
 	while ( ( opt = getopt (argc, argv, optstr ) ) != -1 )
@@ -33,6 +35,11 @@ int main(int argc, char *argv[])
 			print_usage( argv[0] );
 			return ( EXIT_SUCCESS );
 		case 'n':
+			if (optarg == NULL)
+			{
+				fprintf(stderr, "Error! Option n needs to have a number");
+				return EXIT_FAILURE;
+			}
 			for(int i = 0; optarg[i] != '\0'; i++)
 			{
 				if (!isdigit(optarg[i]))
@@ -45,10 +52,26 @@ int main(int argc, char *argv[])
 			cout << proc << " set as n"<<endl;
 			break;
 		case 's':
+			for(int i = 0; optarg[i] != '\0'; i++)
+			{
+				if (!isdigit(optarg[i]))
+				{
+					fprintf(stderr, "Error! %s is not a valid number.\n", optarg);
+					return EXIT_FAILURE;
+				}
+			}
 			simul = atoi(optarg);
 			cout << simul << " set as s" << endl;
 			break;
 		case 't':
+			for(int i = 0; optarg[i] != '\0'; i++)
+			{
+				if (!isdigit(optarg[i]))
+				{
+					fprintf(stderr, "Error! %s is not a valid number.\n", optarg);
+					return EXIT_FAILURE;
+				}
+			}
 			iter = atoi(optarg);
 			cout << iter << " set as t" << endl;
 			break;
@@ -58,17 +81,20 @@ int main(int argc, char *argv[])
 			return EXIT_FAILURE;
 		}
 	}
+
+	str = to_string(iter);
+	char* arg = new char[str.length()+1];
+	strcpy(arg, str.c_str());
 	while (count < proc)
 	{
 		for (int i=0; i<simul; i++)
 		{
 			pid_t childPid = fork();
-			count--;
+			count++;
 	
 			if (childPid == 0)
 			{
-				printf("I am the child, a parent copy! Parent PID is %d and mine is %d\n", getppid(), getpid());
-				char* args[] = {"./user", "I", "am", "using", "exec", NULL};
+				char* args[] = {"./user", arg, NULL};
 				execvp(args[0], args);
 				fprintf(stderr, "Exec failed, terminating!\n");
 				exit(1);
@@ -79,6 +105,7 @@ int main(int argc, char *argv[])
 				printf("I'm a parent! My pid is %d, and my child's pid is %d.\n", getpid(), childPid);
 			}
 		}
+		sleep(3);
 	}
 	printf("Parent is now ending. \n");
 	return EXIT_SUCCESS;
