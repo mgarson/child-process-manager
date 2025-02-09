@@ -7,23 +7,44 @@
 using namespace std;
 
 int main(int argc, char** argv)
-{       
-	int iter = atoi(argv[1]);
-	while (iter > 0)
-	{
-		printf("USER PID: %d ", getpid());
+{ 
+	if(argv[1] == nullptr)
+  	{	
+		printf("Iterations: 1\n");
+
+		printf("User PID: %d ", getpid());
 		printf("PPID: %d ", getppid());
-		printf("Iteration: %d ", iter);
+		printf("Iteration: 1 ");
 		printf("before sleeping\n");
 
 		sleep(1);
 
 		printf("USER PID: %d ", getpid());
 		printf("PPID: %d ", getppid());
-		printf("Iteration: %d ", iter);
+		printf("Iteration: 1 ");
 		printf("after sleeping\n");
+
+	}
+	
+	else
+	{	
+		int iter = atoi(argv[1]);
+		while (iter > 0)
+		{
+			printf("USER PID: %d ", getpid());
+			printf("PPID: %d ", getppid());
+			printf("Iteration: %d ", iter);
+			printf("before sleeping\n");
+
+			sleep(1);
+
+			printf("USER PID: %d ", getpid());
+			printf("PPID: %d ", getppid());
+			printf("Iteration: %d ", iter);
+			printf("after sleeping\n");
 		
-		iter--;
+			iter--;
+		}
 	}
 
 	printf("\nChild is now ending\n");
