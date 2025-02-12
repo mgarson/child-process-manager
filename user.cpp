@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	printf("\nChild is now ending\n");
+	printf("\nUser is now ending\n");
 	
         return EXIT_SUCCESS;
         
