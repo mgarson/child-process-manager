@@ -1,4 +1,3 @@
-#include <iostream>
 #include <unistd.h>
 #include <cstdlib>
 #include <sys/wait.h>
@@ -28,6 +27,7 @@ void print_usage(const char * app)
 
 int main(int argc, char *argv[])
 {
+	// Structure to hold values for options in command line argument
 	options_t options;
 
 	//Set default values
@@ -50,10 +50,11 @@ int main(int argc, char *argv[])
 	{
 		switch ( opt )
 		{
-		case 'h':
+		case 'h': // Help 
+			//  Prints usage 
 			print_usage( argv[0] );
 			return ( EXIT_SUCCESS );
-		case 'n':
+		case 'n': // Total amount of processes
 			// Check if n's argument starts with '-'
 			if (optarg[0] == '-')
 			{	
@@ -90,7 +91,7 @@ int main(int argc, char *argv[])
 			options.proc = atoi(optarg);
 			break;
 
-		case 's':
+		case 's': // Total amount of processes that can run simultaneously
 			// Checks if s's argument starts with '-'
 			if (optarg[0] == '-')
 			{
@@ -127,7 +128,7 @@ int main(int argc, char *argv[])
 			options.simul = atoi(optarg);
 			break;
 
-		case 't':
+		case 't': // Total amount of iterations in each child process
 			// Checks if t's argument starts with '-'
 			if (optarg[0] == '-')
 			{
@@ -177,8 +178,8 @@ int main(int argc, char *argv[])
 	// Copies str to arg so it is able to be passed into child program
 	strcpy(arg, str.c_str());
 
-	// Loop that will continue until specified amount of child processes is reached
-                         
+	// Loop that will continue until specified amount of child processes is reached or until running processes is 0
+	// Ensures only the specified amount of processes are able to be run, and that no processes are still running when loop ends
         while (total < options.proc || running > 0)
 	{
 
@@ -189,20 +190,20 @@ int main(int argc, char *argv[])
 			// Fork a new child process 
 			pid_t childPid = fork();
 
-			// Child process
-			if (childPid == 0)
+			if (childPid == 0) // Child process
 			{
-				printf("Child %d starts execution at %ld\n", getpid(), time(NULL)); 
+				// Create array of arguments to pass to exec. "./user" is the program to execute, arg is the command line argument
+				// to be passed to "./user", and NULL shows it is the end of the argument list
 				char* args[] = {"./user", arg, NULL};
 
 				// Replace current process with "./user" process and pass iteration amount as parameter
 				execvp(args[0], args);
-				// If this prints, means exec failed
+				// If this prints, means exec failed. 
+				// Prints error message and exits
 				fprintf(stderr, "Exec failed, terminating!\n");
 				exit(1);
 			}
-			// Parent process
-			else
+			else // Parent process
 			{
 				// Increment total created processes and running processes
 				total++;
@@ -211,15 +212,14 @@ int main(int argc, char *argv[])
 		}
 			
 			// Wait for any child process to finish and set its pid to finishedChild
-			pid_t finishedChild = waitpid(-1, NULL, 0);
+			pid_t finishedChild = wait(0);
 			// Ensures a valid pid was returned, meaning child process successfully ended
 			if (finishedChild > 0)
 			{
-			running--;
-			printf("I'm a parent! My pid is %d and my child just ended, child pid %d\n", getpid(), finishedChild);
+				// Decrement amount of processes running 
+				running--;
 			}
 	}	
-	printf("Parent is now ending. \n");
 	return EXIT_SUCCESS;
 
 
