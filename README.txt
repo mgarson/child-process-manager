@@ -8,7 +8,7 @@ The other executable, user, is generated from user.cpp. The oss program launches
 The child processes run simultaneously up to a specified amount of times. The child process will also do a specified amount of iterations before ending.
 
 Compilation:
-Compile these programs using make. In the command line it should look like:
+These programs will compile using the included makefile. In the command line it will compile if given:
 make
 
 Running the Program:

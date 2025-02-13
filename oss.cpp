@@ -1,3 +1,9 @@
+//Operating Systems Project One
+//Author: Maija Garson
+//Date: 02/13/2025
+//Description: A program that takes in command line options to run child processes up to a given amount. These processes will run simultaneously
+//up to the specified amount. The child processes will do a specifed amount of iterations. Any value that is not specified will default to 1.
+
 #include <unistd.h>
 #include <cstdlib>
 #include <sys/wait.h>
