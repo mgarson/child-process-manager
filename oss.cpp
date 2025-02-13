@@ -179,13 +179,12 @@ int main(int argc, char *argv[])
 
 	// Loop that will continue until specified amount of child processes is reached
                          
-        fprintf(stdout, "Amount of processes: %d\nAmount that are simultaneous: %d\nAmount of iterations: %d.\n", options.proc, options.simul, options.iter);
-        // Creates new string and sets it to iter's value as a string
-        while (total < options.proc)
+        while (total < options.proc || running > 0)
 	{
 
-		// Determines if current amount of running processes is less that amount allowed to be simultaneous
-		if (running < options.simul)
+		// Loop that will continue until both total amount of processes is greater than/ equal to specified amount
+		// and current processes running is greater than/ equal to specified amount
+		while (total < options.proc && running < options.simul)
 		{
 			// Fork a new child process 
 			pid_t childPid = fork();
@@ -210,15 +209,15 @@ int main(int argc, char *argv[])
 				running++;
 			}
 		}
-		else
-		{
-			// Wait for any child process to end and decrement total running processes
+			
+			// Wait for any child process to finish and set its pid to finishedChild
 			pid_t finishedChild = waitpid(-1, NULL, 0);
+			// Ensures a valid pid was returned, meaning child process successfully ended
+			if (finishedChild > 0)
+			{
 			running--;
 			printf("I'm a parent! My pid is %d and my child just ended, child pid %d\n", getpid(), finishedChild);
-		}
-		// Delay to ensure processes do not end prematurely
-		sleep(3);	
+			}
 	}	
 	printf("Parent is now ending. \n");
 	return EXIT_SUCCESS;

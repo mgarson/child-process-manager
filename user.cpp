@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	printf("\nUser is now ending\n");
+	printf("\nUser %d is now ending\n", getpid());
 	
         return EXIT_SUCCESS;
         
