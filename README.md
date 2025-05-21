@@ -12,7 +12,7 @@ A command-line program that forks multiple child processes and manages their exe
 ## Features
 
 - **Process forking**  
-  The master (`oss`) spawns each `user` child via `fork()` & `execvp()`, up to a total of *N* processes (set by `-n N`, default: 1).
+  The master (`oss`) spawns each `user` child via `fork()` + `execvp()`, up to a total of *N* processes (set by `-n N`, default: 1).
 - **Concurrency control**  
   Ensures that no more than *M* children run at once (set by `-s M`, default: 1); parent blocks on `wait()` to free slots. 
 - **Configurable iterations**  
