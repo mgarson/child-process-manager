@@ -1,8 +1,3 @@
-//Author: Maija Garson
-//Date: 02/13/2025
-//Description: A program that will print it's pid, parent's pid, and its current iteration, it will then sleep and reprint everything.
-//It will iterate up to the specified amount given in the command line. If no value is given, it will do 1 iteration.
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
